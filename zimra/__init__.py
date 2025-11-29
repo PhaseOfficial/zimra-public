@@ -31,6 +31,12 @@ Fiscal Device Gateway API can be accessed using HTTPS protocol via mTLS.
 All Fiscal Device Gateway API methods except registerDevice and getServerCertificate use CLIENT AUTHENTICATION CERTIFICATE
 which is issued by FDMS.
 '''
+
+'''
+This library provides an interface to interact with the ZIMRA Fiscal Device Management System (FDMS) API.
+it has been updated to suit requirements for fiscal devices as per the ZIMRA FDMS API documentation. v7.2
+by Panashe Arthur Mhonde (https://github.com/PhaseOfficial)
+'''
 __all__ = [
     'register_new_device',
     'tax_calculator',
@@ -58,6 +64,7 @@ def register_new_device(
     fiscal_device_serial_no:str, 
     device_id:str,
     activation_key:str, 
+    device_version:str = 'v1',
     model_name:str = 'Server',
     folder_name:str = 'prod', 
     certificate_filename:str='certificate', 
@@ -120,9 +127,9 @@ def register_new_device(
     # Serialize CSR to PEM format
     csr_pem = csr.public_bytes(serialization.Encoding.PEM).decode('utf-8')
     if prod:
-        url = f'https://fdmsapi.zimra.co.zw/Public/v1/{device_id}/RegisterDevice'
+        url = f'https://fdmsapi.zimra.co.zw/Public/{device_version}/{device_id}/RegisterDevice'
     else:
-        url = f'https://fdmsapitest.zimra.co.zw/Public/v1/{device_id}/RegisterDevice'
+        url = f'https://fdmsapitest.zimra.co.zw/Public/{device_version}/{device_id}/RegisterDevice'
 
     headers = {
         'accept': 'application/json',
@@ -163,6 +170,7 @@ class Device:
     def __init__(
             self,
             device_id: str, 
+            device_version: str='v1',
             serialNo: str, 
             activationKey: str, 
             cert_path: str, 
@@ -180,10 +188,10 @@ class Device:
         self.keyPath: str = private_key_path
         
         if test_mode:
-            self.base_url: str = 'https://fdmsapitest.zimra.co.zw/Device/v1/'
+            self.base_url: str = f'https://fdmsapitest.zimra.co.zw/Device/{device_version}/'
             self.qrUrl:str = 'https://fdmstest.zimra.co.zw/'
         else:
-            self.base_url: str = 'https://fdmsapi.zimra.co.zw/Device/v1/'
+            self.base_url: str = f'https://fdmsapi.zimra.co.zw/Device/{device_version}/'
             self.qrUrl:str = 'https://fdms.zimra.co.zw/'
 
         self.deviceBaseUrl = f'{self.base_url}{self.deviceID}'
@@ -540,8 +548,8 @@ class Device:
             
         # Mandatory fields
         mandatory_fields = [
-            "receiptType",        # "FISCALINVOICE" | "CREDITNOTE" | "DEBITNOTE"
-            "receiptCurrency",    # USD | ZWG
+            "receiptType",        # "FISCALINVOICE",  | "CREDITNOTE" | "DEBITNOTE"
+            "receiptCurrency",    # USD | ZiG
             "receiptCounter",     # integer
             "receiptGlobalNo",    # integer
             "invoiceNo",          # unique string
