@@ -262,8 +262,42 @@ class Device:
     
     def getConfig(self)->dict:
         '''returns:
-        example structure...
+        {
+            'taxPayerName': 'SAINTFORD VENTURES', 
+            'taxPayerTIN': '2000253679', 
+            'vatNumber': '220227652', 
+            'deviceSerialNo': '9029D38C011B', 
+            'deviceBranchName': 'SAINTFORD VENTURES (PVT) LTD', 
+            'deviceBranchAddress': {'province': 'Harare', 'street': 'Plymouth road', 'houseNo': '44', 'city': 'Harare'}, 
+            'deviceBranchContacts': {'phoneNo': '0776298764', 'email': 'saintfordventures@gmail.com'}, 
+            'deviceOperatingMode': 'Online', 
+            'taxPayerDayMaxHrs': 24, 
+            'applicableTaxes': [{
+                'taxName': 'Exempt', 
+                'validFrom': '2023-01-01T00:00:00', 
+                'taxID': 1
+                }, 
+                {'taxPercent': 0.0, 
+                'taxName': 'Zero rate 0%', 
+                'validFrom': '2023-01-01T00:00:00', 
+                'taxID': 2
+                }, 
+                {'taxPercent': 15.0, 
+                'taxName': 'Standard rated 15%', 
+                'validFrom': '2023-01-01T00:00:00', 
+                'taxID': 3}, 
+                {'taxPercent': 5.0, 
+                'taxName': 'Non-VAT Withholding Tax', 
+                'validFrom': '2024-01-01T00:00:00', 
+                'taxID': 514
+                }], 
+            'certificateValidTill': '2027-07-31T06:26:09', 
+            'qrUrl': 'https://fdmstest.zimra.co.zw', 
+            'taxpayerDayEndNotificationHrs': 2, 
+            'operationID': '0HN4FDK6SREE1:00000001'
+        }
         ''' 
+    
         url = f'{self.deviceBaseUrl}/GetConfig'
         response = requests.get(
             url,
