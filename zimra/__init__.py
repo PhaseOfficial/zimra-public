@@ -914,7 +914,13 @@ class Device:
             # Mapping for fiscalCounterMoneyType
             money_type_mapping = {
                 0: "CASH",
-                1: "CARD"
+                1: "CARD",
+                2: "MOBILEWALLET",
+                3: "COUPON",
+                4: "CREDIT",
+                5: "BANKTRANSFER",
+                6: "OTHER"
+                
             }
             # Sort the fiscalDayCounters as per the rules
             sorted_counters = sorted(
